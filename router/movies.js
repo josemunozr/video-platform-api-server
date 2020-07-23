@@ -1,13 +1,15 @@
 const express = require('express');
-const { moviesMock } = require('../utils/mocks/moviesMock');
+const MoviesServices = require('../services/movies');
 
 function moviesApp(app) {
   const router = express.Router();
   app.use('/api/movies', router);
+  const moviesServices = new MoviesServices();
 
   router.get('/', async (req, res, next) => {
+    const { tags } = req.query;
     try {
-      const movies = await Promise.resolve(moviesMock);
+      const movies = await moviesServices.getMovies({ tags });
 
       res.status(200).json({
         data: movies,
@@ -19,8 +21,9 @@ function moviesApp(app) {
   });
 
   router.get('/:movieId', async (req, res, next) => {
+    const { movieId } = req.params;
     try {
-      const movie = await Promise.resolve(moviesMock[0]);
+      const movie = await moviesServices.getMovie({ movieId });
 
       res.status(200).json({
         data: movie,
@@ -32,8 +35,9 @@ function moviesApp(app) {
   });
 
   router.post('/', async (req, res, next) => {
+    const { body: movie } = req;
     try {
-      const movieCreated = await Promise.resolve(moviesMock[0].id);
+      const movieCreated = await moviesServices.createMovie({ movie });
 
       res.status(201).json({
         data: movieCreated,
@@ -44,9 +48,11 @@ function moviesApp(app) {
     }
   });
 
-  router.put('/', async (req, res, next) => {
+  router.put('/:movieId', async (req, res, next) => {
+    const { body: movie } = req;
+    const { movieId } = req.params;
     try {
-      const movieUpdate = await Promise.resolve(moviesMock[0].id);
+      const movieUpdate = await moviesServices.updateMovie({movie, movieId});
 
       res.status(200).json({
         data: movieUpdate,
@@ -58,8 +64,9 @@ function moviesApp(app) {
   });
 
   router.delete('/:movieId', async (req, res, next) => {
+    const { movideId } = req.params;
     try {
-      const movieUpdate = await Promise.resolve(moviesMock[0].id);
+      const movieUpdate = await moviesServices.deleteMovie({ movideId });
 
       res.status(200).json({
         data: movieUpdate,
