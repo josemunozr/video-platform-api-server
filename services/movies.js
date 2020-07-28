@@ -1,27 +1,38 @@
-const { moviesMock } = require('../utils/mocks/moviesMock');
+const MongoLib = require('../lib/mongo');
+
 class MoviesService {
+  constructor() {
+    this.mongoDB = new MongoLib();
+    this.collection = 'movies';
+  }
+  
   async getMovies({ tags }) {
-    const movies = await Promise.resolve(moviesMock);
+    const query = tags && { tags: { $in: tags } };
+    const movies = await this.mongoDB.getAll(this.collection, query);
     return movies || [];
   }
 
   async getMovie({ movieId }) {
-    const movie = await Promise.resolve(moviesMock[0]);
+    const movie = await this.mongoDB.get(this.collection, movieId);
     return movie || {};
   }
 
   async createMovie({ movie }) {
-    const createdMovideId = await Promise.resolve(moviesMock[0].id);
+    const createdMovideId = await this.mongoDB.create(this.collection, movie);
     return createdMovideId;
   }
 
-  async updateMovie({ movie, movieId }) {
-    const updatedMovieId = await Promise.resolve(moviesMock[0].id);
+  async updateMovie({ movieId, movie }) {
+    const updatedMovieId = await this.mongoDB.update(
+      this.collection,
+      movieId,
+      movie
+    );
     return updatedMovieId;
   }
 
   async deleteMovie({ movieId }) {
-    const deletedMovieId = await Promise.resolve(moviesMock[0].id);
+    const deletedMovieId = await this.mongoDB.delete(this.collection, movieId);
     return deletedMovieId;
   }
 }

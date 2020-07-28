@@ -64,9 +64,9 @@ function moviesApp(app) {
   });
 
   router.delete('/:movieId', async (req, res, next) => {
-    const { movideId } = req.params;
+    const { movieId } = req.params;
     try {
-      const movieUpdate = await moviesServices.deleteMovie({ movideId });
+      const movieUpdate = await moviesServices.deleteMovie({ movieId });
 
       res.status(200).json({
         data: movieUpdate,
