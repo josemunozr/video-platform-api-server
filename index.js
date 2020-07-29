@@ -4,8 +4,13 @@ const app = express();
 const { config } = require('./config/index');
 const moviesApp = require('./router/movies');
 
+const { errorHandler, logErrors } = require('./utils/middlewares/errorHandles');
+
 app.use(express.json());
 moviesApp(app);
+
+app.use(logErrors)
+app.use(errorHandler)
 
 app.listen(config.port, () => {
   console.log(`Listening http://localhost:${config.port}`);
