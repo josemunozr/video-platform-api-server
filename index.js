@@ -4,12 +4,20 @@ const app = express();
 const { config } = require('./config/index');
 const moviesApp = require('./router/movies');
 
-const { errorHandler, logErrors } = require('./utils/middlewares/errorHandles');
+const { errorHandler, logErrors, wrapErrors } = require('./utils/middlewares/errorHandler');
+const notFoundHandler = require('./utils/middlewares/notFoundHandler');
 
+//Body parser
 app.use(express.json());
-moviesApp(app);
 
+//routes
+moviesApp(app);
+app.use(notFoundHandler);
+
+
+// Error middleware
 app.use(logErrors)
+app.use(wrapErrors)
 app.use(errorHandler)
 
 app.listen(config.port, () => {
