@@ -17,7 +17,7 @@ const moviesMock = [
       'Comedy|Romance|Sci-Fi',
       'Adventure|Animation|Children|Comedy|Fantasy',
       'Drama',
-      'Terror'
+      'Terror',
     ],
   },
   {
@@ -157,11 +157,12 @@ const moviesMock = [
 //Methods mocks for tested services
 
 function filteredMoviesMock(tag) {
-  return moviesMock.filter((movie) => movie.tags.includes(tag));
+  const result = moviesMock.filter((movie) => movie.tags.includes(tag));
+  return result || [];
 }
 
 function finOneMovieMock(id) {
-  return moviesMock.find( movie => movie.id === id)
+  return moviesMock.find((movie) => movie.id === id);
 }
 
 //MoviesServicesMock fort tested routes
@@ -179,5 +180,5 @@ module.exports = {
   moviesMock,
   filteredMoviesMock,
   finOneMovieMock,
-  MoviesServicesMosk
+  MoviesServicesMosk,
 };
