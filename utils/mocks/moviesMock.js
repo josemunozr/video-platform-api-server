@@ -21,7 +21,7 @@ const moviesMock = [
     ],
   },
   {
-    id: '3f951b6d-03fa-4fb0-a7a1-188c0abe9e06',
+    id: '5f240efcf373ccfcf8ec4750',
     title: "King Solomon's Mines",
     year: 2019,
     cover: 'http://dummyimage.com/800x600.png/dddddd/000000',
@@ -171,8 +171,20 @@ class MoviesServicesMosk {
     return await Promise.resolve(moviesMock);
   }
 
-  async getMovie() {
-    return await Promise.resolve(moviesMock[0]);
+  async getMovie({ movieId }) {
+    return await Promise.resolve(finOneMovieMock(movieId));
+  }
+
+  async createMovie() {
+    return await Promise.resolve(moviesMock[1].id);
+  }
+
+  async updateMovie() {
+    return await Promise.resolve(moviesMock[1])
+  }
+
+  async deleteMovie () {
+    return await Promise.resolve(moviesMock[1])
   }
 }
 

@@ -8,6 +8,7 @@ const {
 } = require('../utils/schemas/movie');
 
 const validationHandler = require('../utils/middlewares/validationHandler');
+const buildMessage = require('../utils/buildMessage');
 
 function moviesApp(app) {
   const router = express.Router();
@@ -21,7 +22,7 @@ function moviesApp(app) {
 
       res.status(200).json({
         data: movies,
-        message: 'movies listed',
+        message: buildMessage('movie', 'list'),
       });
     } catch (error) {
       next(error);
@@ -38,7 +39,7 @@ function moviesApp(app) {
 
         res.status(200).json({
           data: movie,
-          message: 'movie retrieved',
+          message: buildMessage('movie', 'retrieve'),
         });
       } catch (error) {
         next(error);
@@ -52,11 +53,11 @@ function moviesApp(app) {
     async (req, res, next) => {
       const { body: movie } = req;
       try {
-        const movieCreated = await moviesServices.createMovie({ movie });
+        const movieIdCreated = await moviesServices.createMovie({ movie });
 
         res.status(201).json({
-          data: movieCreated,
-          message: 'movie created',
+          data: movieIdCreated,
+          message: buildMessage('movie', 'create'),
         });
       } catch (error) {
         next(error);
@@ -79,7 +80,7 @@ function moviesApp(app) {
 
         res.status(200).json({
           data: movieUpdate,
-          message: 'movie updated',
+          message: buildMessage('movie', 'update')
         });
       } catch (error) {
         next(error);
@@ -93,11 +94,11 @@ function moviesApp(app) {
     async (req, res, next) => {
       const { movieId } = req.params;
       try {
-        const movieUpdate = await moviesServices.deleteMovie({ movieId });
+        const movieDeleted = await moviesServices.deleteMovie({ movieId });
 
         res.status(200).json({
-          data: movieUpdate,
-          message: 'movie deleted',
+          data: movieDeleted,
+          message: buildMessage('movie', 'delete')
         });
       } catch (error) {
         next(error);

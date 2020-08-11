@@ -41,6 +41,6 @@
   },
   "nyc": {
     "all": true,
-    "include": ["routes", "services", "lib", "utils"]
+    "include": ["routes", "services","utils"]
   }
 }
