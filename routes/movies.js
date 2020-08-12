@@ -9,6 +9,12 @@ const {
 
 const validationHandler = require('../utils/middlewares/validationHandler');
 const buildMessage = require('../utils/buildMessage');
+const cacheResponse = require('../utils/cacheResponse');
+
+const {
+  FIVE_MINUTES_IN_SECONDS,
+  SIXTY_MINUTES_IN_SECONDS,
+} = require('../utils/times');
 
 function moviesApp(app) {
   const router = express.Router();
@@ -16,6 +22,7 @@ function moviesApp(app) {
   const moviesServices = new MoviesServices();
 
   router.get('/', async (req, res, next) => {
+    cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
     const { tags } = req.query;
     try {
       const movies = await moviesServices.getMovies({ tags });
@@ -33,6 +40,8 @@ function moviesApp(app) {
     '/:movieId',
     validationHandler({ movieId: movieIdSchema }, 'params'),
     async (req, res, next) => {
+      cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
+
       const { movieId } = req.params;
       try {
         const movie = await moviesServices.getMovie({ movieId });
@@ -80,7 +89,7 @@ function moviesApp(app) {
 
         res.status(200).json({
           data: movieUpdate,
-          message: buildMessage('movie', 'update')
+          message: buildMessage('movie', 'update'),
         });
       } catch (error) {
         next(error);
@@ -98,7 +107,7 @@ function moviesApp(app) {
 
         res.status(200).json({
           data: movieDeleted,
-          message: buildMessage('movie', 'delete')
+          message: buildMessage('movie', 'delete'),
         });
       } catch (error) {
         next(error);
