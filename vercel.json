@@ -1,0 +1,28 @@
+{
+  "name": "api-videoplatform",
+  "version": 2,
+  "public": false,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@now/node-server"
+    }
+  ],
+  "routes": [
+    {
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      },
+      "src": "/(.*)",
+      "dest": "/index.js"
+    }
+  ],
+  "env": {
+    "DB_USER": "@api-videoplatform_db_user",
+    "DB_PASSWORD": "@api-videoplatform_db_password",
+    "DB_HOST": "@api-videoplatform_db_host",
+    "DB_NAME": "@api-videoplatform_db_name"
+  }
+}
