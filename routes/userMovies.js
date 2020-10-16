@@ -8,7 +8,7 @@ const {
   userMovieIdSchema,
 } = require('../utils/schemas/userMovies');
 
-function userMoviesApp(app) {
+function userMoviesApi(app) {
   const router = express.Router();
   app.use('/api/user-movies', router);
 
@@ -70,4 +70,4 @@ function userMoviesApp(app) {
   );
 }
 
-module.exports = userMoviesApp;
+module.exports = userMoviesApi;

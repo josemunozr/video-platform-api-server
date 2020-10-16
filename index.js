@@ -2,8 +2,9 @@ const express = require('express');
 const app = express();
 
 const { config } = require('./config/index');
-const moviesApp = require('./routes/movies');
-const userMoviesApp = require('./routes/userMovies')
+const moviesApi = require('./routes/movies');
+const userMoviesApi = require('./routes/userMovies')
+const authApi = require('./routes/auth')
 
 const { errorHandler, logErrors, wrapErrors } = require('./utils/middlewares/errorHandler');
 const notFoundHandler = require('./utils/middlewares/notFoundHandler');
@@ -12,8 +13,9 @@ const notFoundHandler = require('./utils/middlewares/notFoundHandler');
 app.use(express.json());
 
 //routes
-moviesApp(app);
-userMoviesApp(app);
+authApi(app);
+moviesApi(app);
+userMoviesApi(app);
 app.use(notFoundHandler);
 
 

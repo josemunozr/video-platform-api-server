@@ -16,7 +16,7 @@ const {
   SIXTY_MINUTES_IN_SECONDS,
 } = require('../utils/times');
 
-function moviesApp(app) {
+function moviesApi(app) {
   const router = express.Router();
   app.use('/api/movies', router);
   const moviesServices = new MoviesServices();
@@ -116,4 +116,4 @@ function moviesApp(app) {
   );
 }
 
-module.exports = moviesApp;
+module.exports = moviesApi;
