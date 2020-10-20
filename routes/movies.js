@@ -1,15 +1,17 @@
 const express = require('express');
 const MoviesServices = require('../services/movies');
 
+const validationHandler = require('../utils/middlewares/validationHandler');
+const buildMessage = require('../utils/buildMessage');
+const cacheResponse = require('../utils/cacheResponse');
+
+const guardHandler = require('../utils/middlewares/guardHandler');
+
 const {
   movieIdSchema,
   createMovieSchema,
   updateMovieSchema,
 } = require('../utils/schemas/movie');
-
-const validationHandler = require('../utils/middlewares/validationHandler');
-const buildMessage = require('../utils/buildMessage');
-const cacheResponse = require('../utils/cacheResponse');
 
 const {
   FIVE_MINUTES_IN_SECONDS,
@@ -18,6 +20,7 @@ const {
 
 function moviesApi(app) {
   const router = express.Router();
+  router.use(guardHandler);
   app.use('/api/movies', router);
   const moviesServices = new MoviesServices();
 

@@ -2,6 +2,8 @@ const express = require('express');
 const UserMoviesService = require('../services/userMovies');
 const validateHandler = require('../utils/middlewares/validationHandler');
 
+const guardHandler = require('../utils/middlewares/guardHandler');
+
 const { userIdSchema } = require('../utils/schemas/user');
 const {
   createUserMovieSchema,
@@ -10,6 +12,7 @@ const {
 
 function userMoviesApi(app) {
   const router = express.Router();
+  router.use(guardHandler)
   app.use('/api/user-movies', router);
 
   const userMoviesService = new UserMoviesService();
