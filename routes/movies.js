@@ -6,6 +6,7 @@ const buildMessage = require('../utils/buildMessage');
 const cacheResponse = require('../utils/cacheResponse');
 
 const guardHandler = require('../utils/middlewares/guardHandler');
+const validationScopesHandler = require('../utils/middlewares/validationScopesHandler');
 
 const {
   movieIdSchema,
@@ -24,23 +25,28 @@ function moviesApi(app) {
   app.use('/api/movies', router);
   const moviesServices = new MoviesServices();
 
-  router.get('/', async (req, res, next) => {
-    cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
-    const { tags } = req.query;
-    try {
-      const movies = await moviesServices.getMovies({ tags });
+  router.get(
+    '/',
+    validationScopesHandler(['read:movies']),
+    async (req, res, next) => {
+      cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
+      const { tags } = req.query;
+      try {
+        const movies = await moviesServices.getMovies({ tags });
 
-      res.status(200).json({
-        data: movies,
-        message: buildMessage('movie', 'list'),
-      });
-    } catch (error) {
-      next(error);
+        res.status(200).json({
+          data: movies,
+          message: buildMessage('movie', 'list'),
+        });
+      } catch (error) {
+        next(error);
+      }
     }
-  });
+  );
 
   router.get(
     '/:movieId',
+    validationScopesHandler(['read:movies']),
     validationHandler({ movieId: movieIdSchema }, 'params'),
     async (req, res, next) => {
       cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
@@ -61,6 +67,7 @@ function moviesApi(app) {
 
   router.post(
     '/',
+    validationScopesHandler(['create:movies']),
     validationHandler(createMovieSchema),
     async (req, res, next) => {
       const { body: movie } = req;
@@ -79,6 +86,7 @@ function moviesApi(app) {
 
   router.put(
     '/:movieId',
+    validationScopesHandler(['update:movies']),
     validationHandler({ movieId: movieIdSchema }, 'params'),
     validationHandler(updateMovieSchema),
     async (req, res, next) => {
@@ -102,6 +110,7 @@ function moviesApi(app) {
 
   router.delete(
     '/:movieId',
+    validationScopesHandler(['delete:movies']),
     validationHandler({ movieId: movieIdSchema }, 'params'),
     async (req, res, next) => {
       const { movieId } = req.params;

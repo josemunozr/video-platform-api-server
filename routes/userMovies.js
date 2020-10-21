@@ -1,6 +1,7 @@
 const express = require('express');
 const UserMoviesService = require('../services/userMovies');
 const validateHandler = require('../utils/middlewares/validationHandler');
+const validationScopesHandler = require('../utils/middlewares/validationScopesHandler')
 
 const guardHandler = require('../utils/middlewares/guardHandler');
 
@@ -19,6 +20,7 @@ function userMoviesApi(app) {
 
   app.get(
     '/',
+    validationScopesHandler(['read:user-movies']),
     validateHandler({ userId: userIdSchema }, 'query'),
     async (req, res, next) => {
       const { userId } = req.query;
@@ -36,6 +38,7 @@ function userMoviesApi(app) {
 
   app.post(
     '/',
+    validationScopesHandler(['create:user-movies']),
     validateHandler(createUserMovieSchema),
     async (req, res, next) => {
       const { body: userMovie } = req;
@@ -55,6 +58,7 @@ function userMoviesApi(app) {
 
   app.delete(
     '/:userMovieId',
+    validationScopesHandler(['delete:user-movies']),
     validateHandler({ userMovieId: userMovieIdSchema }, 'params'),
     async (req, res, next) => {
       const { userMovieId } = req.params;
@@ -71,6 +75,6 @@ function userMoviesApi(app) {
       }
     }
   );
-}
+} 
 
 module.exports = userMoviesApi;
