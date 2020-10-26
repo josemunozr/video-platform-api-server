@@ -13,7 +13,7 @@ class UserMoviesService {
   }
 
   async createUserMovie({ userMovie }) {
-    const createdUserMovieId = this.mongoDB.create(userMovie);
+    const createdUserMovieId = this.mongoDB.create(this.collection, userMovie);
     return createdUserMovieId;
   }
 

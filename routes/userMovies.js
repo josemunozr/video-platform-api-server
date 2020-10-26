@@ -18,7 +18,7 @@ function userMoviesApi(app) {
 
   const userMoviesService = new UserMoviesService();
 
-  app.get(
+  router.get(
     '/',
     validationScopesHandler(['read:user-movies']),
     validateHandler({ userId: userIdSchema }, 'query'),
@@ -36,7 +36,7 @@ function userMoviesApi(app) {
     }
   );
 
-  app.post(
+  router.post(
     '/',
     validationScopesHandler(['create:user-movies']),
     validateHandler(createUserMovieSchema),
@@ -56,7 +56,7 @@ function userMoviesApi(app) {
     }
   );
 
-  app.delete(
+  router.delete(
     '/:userMovieId',
     validationScopesHandler(['delete:user-movies']),
     validateHandler({ userMovieId: userMovieIdSchema }, 'params'),
