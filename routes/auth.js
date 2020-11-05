@@ -5,7 +5,10 @@ const jwt = require('jsonwebtoken');
 const ApiKeysService = require('../services/apiKeys');
 const UsersService = require('../services/users');
 const validationHandler = require('../utils/middlewares/validationHandler');
-const { createUserSchema } = require('../utils/schemas/user')
+const {
+  createUserSchema,
+  createProviderUserSchema,
+} = require('../utils/schemas/user');
 const { config } = require('../config');
 
 //Basic Strategy
@@ -57,19 +60,58 @@ function authApi(app) {
     })(req, res, next);
   });
 
-  router.post('/sign-up', validationHandler(createUserSchema) , async (req, res, next) => {
-    const { body: user} = req;
-    try {
-      const userCreatedId = await usersService.createUser({user})
+  router.post(
+    '/sign-up',
+    validationHandler(createUserSchema),
+    async (req, res, next) => {
+      const { body: user } = req;
+      try {
+        const userCreatedId = await usersService.createUser({ user });
 
-      return res.status(201).json({
-        data: userCreatedId,
-        message: 'user created'
-      })
-    } catch (error) {
-      next(error)
+        return res.status(201).json({
+          data: userCreatedId,
+          message: 'user created',
+        });
+      } catch (error) {
+        next(error);
+      }
     }
-  });
+  );
+
+  router.post(
+    '/sign-provider',
+    validationHandler(createProviderUserSchema),
+    async (req, res, next) => {
+      const { apiKeyToken, ...user } = req.body;
+
+      if (!apiKeyToken)
+        return next(boom.unauthorized('apiKeyToken is required'));
+
+      try {
+        const queriedUser = await usersService.getOrCreateUser({ user });
+        const apiKey = await apiKeysService.getApiKeys({ token: apiKeyToken });
+
+        if (!apiKey) return next(boom.unauthorized());
+
+        const { _id: id, name, email } = queriedUser;
+
+        const payload = {
+          sub: id,
+          name,
+          email,
+          scopes: apiKey.scopes
+        };
+
+        const token = jwt.sign(payload, config.authJwtSecret, {
+          expiresIn: '15m',
+        });
+
+        return res.status(200).json({ token, user: { id, name, email } });
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
 }
 
 module.exports = authApi;
