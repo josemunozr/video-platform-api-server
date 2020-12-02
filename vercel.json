@@ -20,9 +20,14 @@
     }
   ],
   "env": {
-    "DB_USER": "@api-videoplatform_db_user",
-    "DB_PASSWORD": "@api-videoplatform_db_password",
-    "DB_HOST": "@api-videoplatform_db_host",
-    "DB_NAME": "@api-videoplatform_db_name"
+    "DB_USER": "@api-videoplatform_dbuser",
+    "DB_PASSWORD": "@api-videoplatform_dbpassword",
+    "DB_HOST": "@api-videoplatform_dbhost",
+    "DB_NAME": "@api-videoplatform_dbname",
+    "DEFAULT_ADMIN_PASSWORD": "@api-videoplatform_defaultadminpassword",
+    "DEFAULT_USER_PASSWORD": "@api-videoplatform_defaultuserpassword",
+    "AUTH_JWT_SECRET": "@api-videoplatform_authjwtsecret",
+    "PUBLIC_API_KEY_TOKEN": "@api-videoplatfom_publicapikeytoken",
+    "ADMIN_API_KEY_TOKEN": "@api-videoplatform_adminapikeytoken"
   }
 }
