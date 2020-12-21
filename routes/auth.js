@@ -49,7 +49,7 @@ function authApi(app) {
           };
 
           const token = jwt.sign(payload, config.authJwtSecret, {
-            expiresIn: '5m',
+            expiresIn: '60m',
           });
 
           return res.status(200).json({ token, user: { id, name, email } });
