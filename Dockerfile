@@ -1,4 +1,4 @@
-FROM node:12.18.3-alpine
+FROM node:erbium-alpine3.11
 WORKDIR /src/app
 COPY ./package.json ./
 RUN npm install
